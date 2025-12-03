@@ -246,13 +246,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const lockButton4 = document.querySelector(".lock-info-4 .lock-button");
   const lockInfo4 = document.querySelector(".lock-info-4");
   const lockDoors4 = document.querySelector(".lock-doors-4");
-  const colorButtonsContent = document.querySelector(".color-buttons-content");
+  const faqContent = document.querySelector(".faq-content");
   const lockCardContainer4 = document.querySelector(".lock-card-container-4");
 
   if (
     lockButton4 &&
     lockDoors4 &&
-    colorButtonsContent &&
+    faqContent &&
     lockInfo4 &&
     lockCardContainer4
   ) {
@@ -266,10 +266,49 @@ document.addEventListener("DOMContentLoaded", () => {
       // Open the doors
       lockDoors4.classList.add("opening");
 
-      // Show color buttons content after doors open
+      // Show FAQ content after doors open
       setTimeout(() => {
-        colorButtonsContent.classList.add("visible");
+        faqContent.classList.add("visible");
       }, 300);
+    });
+  }
+
+  /* FAQ Modal functionality */
+  const faqButtonCard2 = document.querySelector(".card-2-left .faq-button");
+  const faqButtonCard4 = document.querySelector(".faq-button-card4");
+  const faqModal = document.querySelector(".faq-modal");
+  const faqModalClose = document.querySelector(".faq-modal-close");
+  const faqModalOverlay = document.querySelector(".faq-modal-overlay");
+
+  // Function to open FAQ modal
+  function openFaqModal() {
+    if (faqModal) {
+      faqModal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+  }
+
+  // Open modal on card-2 FAQ button click (mobile version)
+  if (faqButtonCard2) {
+    faqButtonCard2.addEventListener("click", openFaqModal);
+  }
+
+  // Open modal on card-4 FAQ button click (desktop version)
+  if (faqButtonCard4) {
+    faqButtonCard4.addEventListener("click", openFaqModal);
+  }
+
+  if (faqModalClose && faqModal) {
+    faqModalClose.addEventListener("click", function () {
+      faqModal.classList.remove("active");
+      document.body.style.overflow = "";
+    });
+  }
+
+  if (faqModalOverlay && faqModal) {
+    faqModalOverlay.addEventListener("click", function () {
+      faqModal.classList.remove("active");
+      document.body.style.overflow = "";
     });
   }
 
@@ -407,6 +446,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (popupBgExit && contactPopup) {
     popupBgExit.addEventListener("click", function () {
       contactPopup.classList.remove("active");
+      // Reset email visibility when closing
+      const emailText = document.querySelector(".email-text");
+      if (emailText) {
+        emailText.classList.remove("show");
+        emailText.style.display = "none";
+      }
     });
   }
 
@@ -415,9 +460,37 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", function () {
       if (contactPopup) {
         contactPopup.classList.remove("active");
+        // Reset email visibility when closing
+        const emailText = document.querySelector(".email-text");
+        if (emailText) {
+          emailText.classList.remove("show");
+          emailText.style.display = "none";
+        }
       }
     });
   });
+
+  /* Email Toggle functionality */
+  const emailToggleBtn = document.querySelector(".email-toggle-btn");
+  const emailText = document.querySelector(".email-text");
+
+  if (emailToggleBtn && emailText) {
+    emailToggleBtn.addEventListener("click", function () {
+      if (emailText.classList.contains("show")) {
+        // Hide email
+        emailText.classList.remove("show");
+        setTimeout(() => {
+          emailText.style.display = "none";
+        }, 300);
+      } else {
+        // Show email
+        emailText.style.display = "block";
+        setTimeout(() => {
+          emailText.classList.add("show");
+        }, 10);
+      }
+    });
+  }
 
   /* Project Popup functionality */
   const projectPopup = document.querySelector(".project-popup");
@@ -432,28 +505,32 @@ document.addEventListener("DOMContentLoaded", () => {
   // Project data
   const projectData = {
     1: {
-      title: "PROJECT ONE",
-      description: "This is a detailed description of project one. It showcases my skills in web development and design.",
-      link: "https://example.com/project1",
-      icon: "🚀"
+      title: "My STEM Creation Framework",
+      description: "Download my report about STEM and how to implement it with my 6 step System",
+      link: "Stem_Creation_Framework.pdf",
+      icon: "📚",
+      download: true
     },
     2: {
-      title: "PROJECT TWO",
-      description: "This is a detailed description of project two. A creative solution for modern web applications.",
-      link: "https://example.com/project2",
-      icon: "🎨"
+      title: "Gabriel's Gitbook",
+      description: "Dive into my signature STEM & robotics lessons for K–5 students—battle bots, LEGO builds, coding missions, and hands-on projects that keep kids engaged and excited to learn.",
+      link: "https://gabriels-organization-13.gitbook.io/gabriel-lesson-portfolio",
+      icon: "📖",
+      download: false
     },
     3: {
-      title: "PROJECT THREE",
-      description: "This is a detailed description of project three. An innovative approach to user experience design.",
-      link: "https://example.com/project3",
-      icon: "💡"
+      title: "Kinder Code & Create",
+      description: "A step by step guide to my early Stem system",
+      link: "https://gabriels-organization-13.gitbook.io/gabriel-lesson-portfolio/lesson-plans-and-activities/kinder-code-and-create",
+      icon: "🎓",
+      download: false
     },
     4: {
-      title: "PROJECT FOUR",
-      description: "This is a detailed description of project four. A comprehensive digital solution for businesses.",
-      link: "https://example.com/project4",
-      icon: "🔥"
+      title: "Coming Soon!",
+      description: "This project is currently in development.",
+      link: "#",
+      icon: "🔜",
+      download: false
     }
   };
 
@@ -466,7 +543,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (projectPopupIcon) projectPopupIcon.textContent = project.icon;
     if (projectPopupTitle) projectPopupTitle.textContent = project.title;
     if (projectPopupDescription) projectPopupDescription.textContent = project.description;
-    if (projectPopupBtn) projectPopupBtn.href = project.link;
+    if (projectPopupBtn) {
+      projectPopupBtn.href = project.link;
+      // Set download attribute if this is a download link
+      if (project.download) {
+        projectPopupBtn.setAttribute('download', '');
+      } else {
+        projectPopupBtn.removeAttribute('download');
+      }
+    }
 
     // Show popup
     if (projectPopup) {
@@ -520,4 +605,65 @@ document.addEventListener("DOMContentLoaded", () => {
       closeProjectPopup();
     }
   });
+
+  /* Portfolio Image Gallery functionality */
+  let portfolioImages = [];
+  let currentImageIndex = 0;
+  const portfolioImage = document.querySelector(".portfolio-image");
+  const portfolioBrowse = document.querySelector(".portfolio-browse");
+  const portfolioNavBtns = document.querySelectorAll(".portfolio-nav-btn");
+  const prevBtn = portfolioNavBtns[0];
+  const nextBtn = portfolioNavBtns[1];
+
+  // Load portfolio images from JSON file
+  fetch('portfolio-images.json')
+    .then(response => response.json())
+    .then(images => {
+      portfolioImages = images;
+      console.log(`Loaded ${portfolioImages.length} portfolio images`);
+    })
+    .catch(error => {
+      console.error('Error loading portfolio images:', error);
+      // Fallback to empty array if JSON fails to load
+      portfolioImages = [];
+    });
+
+  // Function to show portfolio image
+  function showPortfolioImage(index) {
+    if (portfolioImage && portfolioBrowse) {
+      currentImageIndex = index;
+      portfolioImage.src = portfolioImages[currentImageIndex];
+      portfolioImage.classList.add("visible");
+      portfolioBrowse.classList.add("hidden");
+    }
+  }
+
+  // Previous image button
+  if (prevBtn) {
+    prevBtn.addEventListener("click", function () {
+      currentImageIndex--;
+      if (currentImageIndex < 0) {
+        currentImageIndex = portfolioImages.length - 1;
+      }
+      showPortfolioImage(currentImageIndex);
+    });
+  }
+
+  // Next image button
+  if (nextBtn) {
+    nextBtn.addEventListener("click", function () {
+      currentImageIndex++;
+      if (currentImageIndex >= portfolioImages.length) {
+        currentImageIndex = 0;
+      }
+      showPortfolioImage(currentImageIndex);
+    });
+  }
+
+  // Click on browse text to show first image
+  if (portfolioBrowse) {
+    portfolioBrowse.addEventListener("click", function () {
+      showPortfolioImage(0);
+    });
+  }
 });

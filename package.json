@@ -1,0 +1,11 @@
+{
+  "name": "gabriel-portfolio",
+  "version": "1.0.0",
+  "description": "Gabriel's Portfolio Website",
+  "scripts": {
+    "generate-images": "node generate-portfolio-list.js"
+  },
+  "keywords": [],
+  "author": "Gabriel Dos Santos",
+  "license": "ISC"
+}
